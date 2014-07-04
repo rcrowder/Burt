@@ -1,0 +1,92 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+ <title>Downloads: lpc21isp_unix.zip - CMUcam - Trac</title><link rel="start" href="/wiki" /><link rel="search" href="/search" /><link rel="help" href="/wiki/TracGuide" /><link rel="stylesheet" href="/chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="/chrome/common/css/code.css" type="text/css" /><link rel="icon" href="/favicon.ico" type="image/x-icon" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="up" href="/wiki/Downloads" title="Downloads" /><link rel="alternate" href="/attachment/wiki/Downloads/lpc21isp_unix.zip?format=raw" title="Original Format" type="application/zip; charset=utf-8" /><style type="text/css">
+@import url(/chrome/site/style/cmucam.css);
+</style>
+ <script type="text/javascript" src="/chrome/common/js/trac.js"></script>
+</head>
+<body>
+
+
+<div id="banner">
+
+<div id="header"><a id="logo" href="http://cmucam.org/"><img src="/chrome/site/images/banner.jpg" width="135" height="127" alt="CMUcam" /></a><hr /></div>
+
+<form id="search" action="/search" method="get">
+ <div>
+  <label for="proj-search">Search:</label>
+  <input type="text" id="proj-search" name="q" size="10" accesskey="f" value="" />
+  <input type="submit" value="Search" />
+  <input type="hidden" name="wiki" value="on" />
+  <input type="hidden" name="changeset" value="on" />
+  <input type="hidden" name="ticket" value="on" />
+ </div>
+</form>
+
+
+
+<div id="metanav" class="nav"><ul><li class="first">logged in as agr</li><li><a href="/logout">Logout</a></li><li><a href="/settings">Settings</a></li><li><a accesskey="6" href="/wiki/TracGuide">Help/Guide</a></li><li><a href="/about">About Trac</a></li><li class="last"><a href="/account">My Account</a></li></ul></div>
+</div>
+
+<div id="mainnav" class="nav"><ul><li class="active first"><a accesskey="1" href="/wiki">Wiki</a></li><li><a accesskey="2" href="/timeline">Timeline</a></li><li><a accesskey="3" href="/roadmap">Roadmap</a></li><li><a href="/browser">Browse Source</a></li><li><a href="/report">View Tickets</a></li><li><a accesskey="7" href="/newticket">New Ticket</a></li><li><a accesskey="4" href="/search">Search</a></li><li class="last"><a href="/admin">Admin</a></li></ul></div>
+<div id="main">
+
+
+
+
+<div id="ctxtnav" class="nav"></div>
+
+<div id="content" class="attachment">
+
+
+ <h1><a href="/wiki/Downloads">Downloads</a>: lpc21isp_unix.zip</h1>
+ <table id="info" summary="Description"><tbody><tr>
+   <th scope="col">
+    File lpc21isp_unix.zip, 25.9 kB 
+    (added by agr,  2 weeks ago)
+   </th></tr><tr>
+   <td class="message"><p>
+Martin Maurer's Unix / Cygwin Command Line ISP
+</p>
+</td>
+  </tr>
+ </tbody></table>
+ <div id="preview">
+   <strong>HTML preview not available</strong>. To view the file,
+   <a href="/attachment/wiki/Downloads/lpc21isp_unix.zip?format=raw">download the file</a>.
+ </div>
+ <div class="buttons">
+  <form method="get" action=""><div id="delete">
+   <input type="hidden" name="action" value="delete" />
+   <input type="submit" value="Delete attachment" />
+  </div></form>
+ </div>
+
+
+</div>
+<script type="text/javascript">searchHighlight()</script>
+<div id="altlinks"><h3>Download in other formats:</h3><ul><li class="first last"><a href="/attachment/wiki/Downloads/lpc21isp_unix.zip?format=raw">Original Format</a></li></ul></div>
+
+</div>
+
+<div id="footer">
+ <hr />
+ <a id="tracpowered" href="http://trac.edgewall.org/"><img src="/chrome/common/trac_logo_mini.png" height="30" width="107"
+   alt="Trac Powered"/></a>
+ <p class="left">
+  Powered by <a href="/about"><strong>Trac 0.10.3</strong></a><br />
+  By <a href="http://www.edgewall.org/">Edgewall Software</a>.
+ </p>
+ <p class="right">
+  Pressure comes when you don't do your maximum, then you have pressure in your head.
+ </p>
+</div>
+
+
+
+ </body>
+</html>
+

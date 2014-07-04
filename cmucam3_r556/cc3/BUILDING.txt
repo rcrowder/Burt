@@ -1,0 +1,99 @@
+Welcome
+=======
+
+To build the cc3 system, you need GNU Make and a version of GCC.  The
+system is split into 2 main parts, "hal" and "projects".
+
+Inside the hal directory are more directories, one each for a
+particular kind of hardware.
+
+Currently, there is only one hal, "lpc2106-cmucam3".
+
+
+Compiler
+========
+
+The compiler choice is left up to the hal. This allows different hardware
+platforms to use different compilers.
+
+The normal CMUcam3 hal is "lpc2106-cmucam3", which uses a
+version of GCC optimized for the ARM processor. To build using this
+hal, you'll need the arm-none-eabi-* style GCC tools from
+CodeSourcery.  These can be acquired here:
+
+  http://www.codesourcery.com/gnu_toolchains/arm/download.html 
+
+Get the "EABI" or "Bare Metal" target.
+
+
+If you feel like using a different compiler, simply change the
+variables in hal/lpc2106-cmucam3/defs.mk to something else. A popular
+thing to change is COMPILER_PREFIX, in case you have a custom compiler
+built under a different name.
+
+If you would like to try to use the "virtual-cam" hal, which allows for
+prototyping on your PC either add "hal=virtual-cam" at the top of /include/common.mk or type "make hal=virtual-cam" whenever you build (including in the project directories).
+
+
+Building
+========
+
+Once you have the compiler, you need to build the system. From the top
+level, invoking make will build all the hal libraries, and will build
+a subset of items in the "projects" directory. 
+
+Make sure you've built a hal before trying to build any projects!
+
+Changing SUBDIRS in projects/Makefile will change which projects are
+built. Changing SUBDIRS in hal/Makefile will change which hals are
+built.
+
+Invoking make directly from a particular project or hal directory will
+build that directory, regardless of SUBDIRS.
+
+
+Projects
+========
+
+There are a few projects in the projects directory to get you started.
+The "hello_world" project should be a nice introduction to LEDs, MMC access,
+servos, camera use, and serial communication.
+
+If you want to create a project, duplicate the hello_world directory,
+change the PROJECT variable in Makefile, and start editing code!
+
+
+Makefiles in Projects
+=====================
+
+When using the cc3 build system, you'll be using a Makefile in your
+project directory. See projects/hello_world/Makefile for a description
+of how to use the file for your own projects.
+
+
+Hal vs. Projects
+================
+
+Generally, you will not need to make any changes to anything in hal, unless
+you modify or create new hardware, or if the hal you are using is missing
+some important functionality.
+
+Make sure you've built a hal before trying to build any projects! If you
+are inside the projects directory, make does not know how to go up
+and build the hals. Otherwise, you will get an error like this:
+
+ No rule to make target `../../hal/lpc2106-cmucam3/libhal-lpc2106-cmucam3.a'
+
+If this happens, go into the hal directory and run make.
+
+
+Environment
+===========
+
+The cc3 system is build upon a standard C99 environment. For the 
+lpc2106-cmucam3 hal, we use Newlib. Information about Newlib is here:
+
+ http://sources.redhat.com/newlib/
+
+Newlib provides all the features a C programmer expects: malloc, free,
+printf, scanf, open, close, read, write, and friends.
