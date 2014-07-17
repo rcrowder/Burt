@@ -1,3 +1,4 @@
+#if 0
 #include "cc3.h"
 #include "devices.h"
 #include "serial.h"
@@ -118,7 +119,6 @@ static bool uart_recognize (const char *name)
   return process_uart_filename(name) != -1;
 }
 
-#if 0
 static off_t uart_lseek (int file __attribute__((unused)),
 			 off_t offset __attribute__((unused)),
 			 int dir  __attribute__((unused)))

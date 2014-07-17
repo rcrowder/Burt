@@ -175,4 +175,7 @@ int uart1_getc_nb(void);     // return -1 if no char avail
 void uart0_write (char *str);
 void uart0_write_hex (unsigned int i);
 
+void uart1_write (char *str);
+void uart1_write_hex (unsigned int i);
+
 #endif

@@ -39,10 +39,13 @@
 // Values of Bits 0-3 in PINSEL to activate UART0
 #define UART0_PINSEL    ((PINSEL_FIRST_ALT_FUNC<<PINSEL_BITPIN0)|(PINSEL_FIRST_ALT_FUNC<<PINSEL_BITPIN1))
 // Mask of Bits 0-4
-#define UART0_PINMASK      (0x0000000F)    /* PINSEL0 Mask for UART0 */
+#define UART0_PINMASK	(0x0000000F)    /* PINSEL0 Mask for UART0 */
 
 // REG(UART0__LCR devisor latch bit 
 #define UART0_LCR_DLAB  7
+
+#define UART1_PINSEL	(0x00050000)
+#define UART1_PINMASK	(0x000F0000)
 
 cc3_uart_binmode_t _cc3_uart0_binmode;
 cc3_uart_binmode_t _cc3_uart1_binmode;
@@ -78,10 +81,7 @@ void _cc3_uart0_setup(uint16_t baud, uint8_t mode, uint8_t fmode)
 void _cc3_uart1_setup(uint16_t baud, uint8_t mode, uint8_t fmode)
 {
   // setup Pin Function Select Register (Pin Connect Block) 
-  // make sure old values of Bits 0-4 are masked out and
-  // set them according to UART0-Pin-Selection
-  //REG(PCB_PINSEL0) = (REG(PCB_PINSEL0) & ~UART1_PINMASK) | UART1_PINSEL;
-  REG(PCB_PINSEL0) = (REG(PCB_PINSEL0) & ~0x000F0000) | 0x00050000;
+  REG(PCB_PINSEL0) = (REG(PCB_PINSEL0) & ~UART1_PINMASK) | UART1_PINSEL;
 
   REG(UART1_IER) = 0x00;             // disable all interrupts
   REG(UART1_IIR) = 0x00;             // clear interrupt ID register
@@ -310,4 +310,35 @@ void uart0_write_hex (unsigned int i)
     uart0_putc(buffer[b]);
   }
   uart0_write("\r\n");
+}
+
+void uart1_write (char *str)
+{
+  while (*str != '\0') {
+    uart1_putc(*str++);
+  }
+}
+
+void uart1_write_hex (unsigned int i)
+{
+  char buffer[8];
+  int b = 7;
+  int tmp;
+
+  while (b >= 0) {
+    tmp = i % 16;
+    if (tmp < 10) {
+      buffer[b] = tmp + 0x30;
+    } else {
+      buffer[b] = tmp + 0x37;
+    }
+    i /= 16;
+    b--;
+  }
+
+  uart1_write("0x");
+  for (b = 0; b < 8; b++) {
+    uart1_putc(buffer[b]);
+  }
+  uart1_write("\r\n");
 }

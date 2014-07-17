@@ -51,6 +51,7 @@
     <None Include="startup.s" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\projects\burt\main.c" />
     <ClCompile Include="cc3.c" />
     <ClCompile Include="cc3_hal.c" />
     <ClCompile Include="devices.c" />

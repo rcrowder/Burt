@@ -14,13 +14,14 @@
 #define SERVO_MID 128
 #define SERVO_MAX 255
 
-void frame_diff (cc3_frame_diff_pkt_t * pkt, bool rewind);
-void get_histogram (cc3_histogram_pkt_t * h_pkt, bool rewind);
-void get_mean (cc3_color_info_pkt_t * s_pkt, bool rewind);
+void frame_diff (cc3_frame_diff_pkt_t * pkt);
+void get_histogram (cc3_histogram_pkt_t * h_pkt);
+void get_mean (cc3_color_info_pkt_t * s_pkt);
 void led_test (void);
 
 int main (void)
 {
+	int i, val;
 	cc3_histogram_pkt_t my_hist;
 	cc3_color_info_pkt_t s_pkt;
 	cc3_frame_diff_pkt_t fd_pkt;
@@ -49,9 +50,6 @@ int main (void)
 
 	printf( "Calling camera init\n" );
 	cc3_camera_init ();
-	printf( "Camera init done\n%d x %d\n", 
-		cc3_g_pixbuf_frame.raw_width, cc3_g_pixbuf_frame.raw_height );
-
 	cc3_camera_set_colorspace (CC3_COLORSPACE_MONOCHROME);//_RGB/_YCRCB/_HSV/_MONOCHROME
 	cc3_camera_set_resolution (CC3_CAMERA_RESOLUTION_LOW);// (88*2) 176, 144
 	cc3_pixbuf_frame_set_coi (CC3_CHANNEL_ALL);//for full 'colour_info'
@@ -61,6 +59,9 @@ int main (void)
 	//cc3_camera_set_resolution (CC3_CAMERA_RESOLUTION_HIGH);
 	//cc3_pixbuf_frame_set_subsample(CC3_SUBSAMPLE_RANDOM, 2, 2);
 	//cc3_pixbuf_frame_set_coi (CC3_CHANNEL_ALL);//_Y?
+
+	printf( "Camera init done\n%d x %d\n", 
+		cc3_g_pixbuf_frame.raw_width, cc3_g_pixbuf_frame.raw_height );
 
 	// frame difference
 	fd_pkt.coi = CC3_CHANNEL_ALL;
@@ -87,7 +88,7 @@ int main (void)
 	printf ("Hello World...\n");
 
 	printf ("\nPush button on camera back to continue\n");
-	start_time = cc3_timer_get_current_ms ();
+	uint32_t now = cc3_timer_get_current_ms ();
 	while (!cc3_button_get_state ())
 		;
 
@@ -101,7 +102,7 @@ int main (void)
 
 	while (true) {
 		
-        print ("<3 EE\n");
+        printf ("<3 EE\n   0x%02X", cc3_timer_get_current_ms());
 
 		// Grab an image and take a frame difference of it
 		cc3_pixbuf_load ();
@@ -134,9 +135,9 @@ int main (void)
 				cc3_gpio_set_servo_position (1, SERVO_MID);
 			}
 		}
-		printf ("\n");
 
-		cc3_timer_wait_ms(400);
+		printf ("\n");
+		//cc3_timer_wait_ms(400);
 	}
 
 	return 0;
@@ -250,4 +251,3 @@ void led_test (void)
 	cc3_timer_wait_ms(400);
 
 }
-

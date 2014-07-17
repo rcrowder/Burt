@@ -185,6 +185,7 @@
 
 
 /* General Pupupose IO (GPIO) (32 bit data bus) */
+//#define FASTIO
 #ifndef FASTIO
   #define GPIO_BASE          (0xE0028000)
   #define GPIO_IOPIN         (0xE0028000)	/* GPIO Pin value reg  */
