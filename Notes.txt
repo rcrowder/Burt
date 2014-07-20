@@ -1,0 +1,15 @@
+https://github.com/numenta/nupic.git
+
+# `$NUPIC` is the path to your NuPIC repository.
+export NUPIC=$PWD/nupic
+
+# `$NTA` is the installation path for NuPIC. 
+export NTA=$NUPIC/build/release
+
+
+# Fetches any new changes from the original repository
+git fetch upstream
+
+# Merges any changes fetched into your working files
+git merge upstream/master
+
