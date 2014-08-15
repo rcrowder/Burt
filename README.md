@@ -1,6 +1,9 @@
 Burt
 ====
 
-Burt - Sensors, various processing units, Wifi, and motorized platform, coupled with custom software using the Numenta Platform for Intelligent Computing (NuPIC, https://github.com/numenta).
+Burt is currently; 
+Sensors, various processing units, WiFly Wifi, motorized platform, CMUCam3, Netduino mini, dual MEMS microphones attached to the panning head frame, dual servos for camera pan and tilt, CIF typical CMOS based camera sensor (8 bits per pixel), 9 Degrees of freedom motion tracking processor.
 
-[![Burt portrait](/Burt.jpg?raw=true)]
+https://github.com/rcrowder/Burt/wiki
+
+![Burt portrait](/Burt.jpg?raw=true)
