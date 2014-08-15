@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MF_FRAMEWORK_VERSION_V4_1</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -24,7 +24,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE,MF_FRAMEWORK_VERSION_V4_1</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;MF_FRAMEWORK_VERSION_V4_1</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,10 +34,8 @@
     <Compile Include="Main.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FEZDomino_GHIElectronics.NETMF.FEZ, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="GHIElectronics.NETMF.Hardware, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="GHIElectronics.NETMF.IO, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="GHIElectronics.NETMF.System, Version=4.1.4.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="FEZDomino_GHIElectronics.NETMF.FEZ, Version=4.1.8.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="GHIElectronics.NETMF.Hardware, Version=4.1.8.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SPOT.Hardware" />
     <Reference Include="Microsoft.SPOT.Native" />
     <Reference Include="System" />

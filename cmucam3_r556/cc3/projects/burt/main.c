@@ -1,14 +1,28 @@
 #include <math.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <ctype.h>
+
 #include <cc3.h>
 #include <cc3_ilp.h>
 #include <cc3_color_info.h>
 #include <cc3_histogram.h>
 #include <cc3_frame_diff.h>
+
+#define CAMERA_HIGH_RESOLUTION
+#ifdef CAMERA_HIGH_RESOLUTION
+#define CAM_WIDTH	(352)
+#define CAM_HEIGHT	(288)
+#define	CAM_FORMAT	CC3_CAMERA_RESOLUTION_HIGH
+#else
+#define CAM_WIDTH	(176) //(88*2)
+#define CAM_HEIGHT	(144)
+#define	CAM_FORMAT	CC3_CAMERA_RESOLUTION_LOW
+#endif
+
+// _RGB / _YCRCB / _HSV / _MONOCHROME
+#define CAM_COLOURS	CC3_COLORSPACE_MONOCHROME
 
 #define SERVO_MIN 0
 #define SERVO_MID 128
@@ -19,9 +33,30 @@ void get_histogram (cc3_histogram_pkt_t * h_pkt);
 void get_mean (cc3_color_info_pkt_t * s_pkt);
 void led_test (void);
 
+/*
+int Dprintf(const char *fmt, ...)
+{
+	va_list argptr;
+	int len = 1;
+	char    _dstr[120];
+    
+	memset(&_dstr, 0x00, sizeof(_dstr) );
+	va_start(argptr, fmt);
+	len = vsprintf(_dstr, fmt, argptr);
+	va_end(argptr);
+
+	if ((len > 0) && (len < 120 ))
+	{
+		putsUART2( (unsigned int *)_dstr );
+		while(BusyUART2())
+			;
+	}
+	return len; 
+}
+*/
+
 int main (void)
 {
-	int i, val;
 	cc3_histogram_pkt_t my_hist;
 	cc3_color_info_pkt_t s_pkt;
 	cc3_frame_diff_pkt_t fd_pkt;
@@ -45,20 +80,30 @@ int main (void)
 		CC3_UART_BINMODE_BINARY);
 
 	// Make it so that stdout and stdin are not buffered
-	val = setvbuf (stdout, NULL, _IONBF, 0);
-	val = setvbuf (stdin, NULL, _IONBF, 0);
+	setvbuf (stdout, NULL, _IONBF, 0);
+	setvbuf (stdin, NULL, _IONBF, 0);
+
+	printf( "Opening UART1 file pointer\n" );
+	FILE *fp = cc3_uart_fopen(1, "r");
+	if (fp)
+	{
+		printf("Success");
+		int i = 0;
+		while (1)
+		{
+			fprintf(fp, "i = %08d\n", i++);
+		}
+	}
 
 	printf( "Calling camera init\n" );
 	cc3_camera_init ();
-	cc3_camera_set_colorspace (CC3_COLORSPACE_MONOCHROME);//_RGB/_YCRCB/_HSV/_MONOCHROME
-	cc3_camera_set_resolution (CC3_CAMERA_RESOLUTION_LOW);// (88*2) 176, 144
+	cc3_camera_set_colorspace (CAM_COLOURS);
+	cc3_camera_set_resolution (CAM_FORMAT);
 	cc3_pixbuf_frame_set_coi (CC3_CHANNEL_ALL);//for full 'colour_info'
 
-	// Are these better settings for edge detection?
 	//cc3_camera_set_colorspace (CC3_COLORSPACE_YCRCB);?All switches handled?
-	//cc3_camera_set_resolution (CC3_CAMERA_RESOLUTION_HIGH);
+	//cc3_camera_set_resolution (CC3_CAMERA_RESOLUTION_HIGH);// 352, 288
 	//cc3_pixbuf_frame_set_subsample(CC3_SUBSAMPLE_RANDOM, 2, 2);
-	//cc3_pixbuf_frame_set_coi (CC3_CHANNEL_ALL);//_Y?
 
 	printf( "Camera init done\n%d x %d\n", 
 		cc3_g_pixbuf_frame.raw_width, cc3_g_pixbuf_frame.raw_height );
@@ -85,12 +130,9 @@ int main (void)
 	cc3_camera_set_auto_white_balance (false);
 	cc3_camera_set_auto_exposure (false);
 
-	printf ("Hello World...\n");
-
-	printf ("\nPush button on camera back to continue\n");
-	uint32_t now = cc3_timer_get_current_ms ();
-	while (!cc3_button_get_state ())
-		;
+//	printf ("\nPush button on camera back to continue\n");
+//	while (!cc3_button_get_state ())
+//		;
 
 	cc3_led_set_state (0, true);
 
@@ -102,7 +144,7 @@ int main (void)
 
 	while (true) {
 		
-        printf ("<3 EE\n   0x%02X", cc3_timer_get_current_ms());
+        printf ("<3 EE\n   0x%02X\n   ", (unsigned int)cc3_timer_get_current_ms());
 
 		// Grab an image and take a frame difference of it
 		cc3_pixbuf_load ();
@@ -110,7 +152,7 @@ int main (void)
 
 		// Rewind and take a histogram of it
 		cc3_pixbuf_rewind ();
-		get_histogram (&my_hist);
+		//get_histogram (&my_hist);
 
 		// Rewind and get some stats
 		cc3_pixbuf_rewind ();
@@ -123,10 +165,10 @@ int main (void)
 				s_pkt.deviation.channel[0],s_pkt.deviation.channel[1],s_pkt.deviation.channel[2]
 				);
 
-		printf ("hist[%d] = ", my_hist.bins);
-		for (i = 0; i < my_hist.bins; i++)
+/*		printf ("hist[%d] = ", my_hist.bins);
+		for (uint32_t i = 0; i < my_hist.bins; i++)
 		{
-			printf ("%d ", my_hist.hist[i]);
+			printf ("%08X ", my_hist.hist[i]);
 
 			// sample non-blocking serial routine
 			if (!cc3_uart_has_data (1))
@@ -135,14 +177,19 @@ int main (void)
 				cc3_gpio_set_servo_position (1, SERVO_MID);
 			}
 		}
-
+*/
 		printf ("\n");
-		//cc3_timer_wait_ms(400);
+		cc3_timer_wait_ms(400);
+
+	//	if (cc3_button_get_state())
+	//		break;
 	}
 
+	printf("\n\nAll done!\n");
 	return 0;
 }
 
+unsigned char tempBuffer[CAM_WIDTH*3];
 
 void frame_diff (cc3_frame_diff_pkt_t * pkt)
 {
@@ -153,22 +200,22 @@ void frame_diff (cc3_frame_diff_pkt_t * pkt)
 	img.channels = 1;
 	img.width = cc3_g_pixbuf_frame.width;
 	img.height = 1; // 1 row for scanline processing
-	img.pix = malloc (img.width);
-	if (img.pix == NULL) {
-		return;
-	}
+	img.pix = (void*)tempBuffer;
 
-	if (cc3_frame_diff_scanline_start (pkt) != 0) {
-		while (cc3_pixbuf_read_rows (img.pix, 1)) {
+	if (cc3_frame_diff_scanline_start (pkt) != 0)
+	{
+		while (cc3_pixbuf_read_rows (img.pix, 1))
+		{
 			cc3_frame_diff_scanline (&img, pkt);
 		}
+
 		cc3_frame_diff_scanline_finish (pkt);
 	}
 	else
 		printf ("frame diff start error\r");
 
 	cc3_pixbuf_frame_set_coi (old_coi);
-	free (img.pix);
+
 }
 
 
@@ -178,7 +225,7 @@ void get_mean (cc3_color_info_pkt_t * s_pkt)
 	img.channels = 1;
 	img.width = cc3_g_pixbuf_frame.width;
 	img.height = 1;
-	img.pix = malloc (3 * img.width);
+	img.pix = (void*)tempBuffer;
 
 	if (cc3_color_info_scanline_start (s_pkt) != 0) {
 		while (cc3_pixbuf_read_rows (img.pix, 1)) {
@@ -186,7 +233,7 @@ void get_mean (cc3_color_info_pkt_t * s_pkt)
 		}
 		cc3_color_info_scanline_finish (s_pkt);
 	}
-	free (img.pix);
+
 }
 
 
@@ -196,10 +243,7 @@ void get_histogram (cc3_histogram_pkt_t * h_pkt)
 	img.channels = 3;
 	img.width = cc3_g_pixbuf_frame.width;
 	img.height = 1;
-	img.pix = cc3_malloc_rows (1);
-	if (img.pix == NULL) {
-		return;
-	}
+	img.pix = (void*)tempBuffer;
 
 	if (cc3_histogram_scanline_start (h_pkt) != 0) {
 		while (cc3_pixbuf_read_rows (img.pix, 1)) {
@@ -210,8 +254,6 @@ void get_histogram (cc3_histogram_pkt_t * h_pkt)
 	}
 	cc3_histogram_scanline_finish (h_pkt);
 
-	free (img.pix);
-	return;
 }
 
 

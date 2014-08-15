@@ -34,24 +34,8 @@ namespace Burt_MainController
 
         public static void Main()
         {
-            #region Debug and GC setup
-            // Check debug interface
-            if (Configuration.DebugInterface.GetCurrent() == Configuration.DebugInterface.Port.USB1)
-                throw new InvalidOperationException("Current debug interface is USB. It must be changed to something else before proceeding. Refer to your platform user manual to change the debug interface.");
-
             // Disable garbage collector messages
             Debug.EnableGCMessages(false);
-
-            // Start MS
-            USBC_MassStorage ms = USBClientController.StandardDevices.StartMassStorage();
-
-            // wait to connect to PC
-            while (USBClientController.GetState() != USBClientController.State.Running)
-            {
-                Debug.Print("Waiting to connect to PC...");
-                Thread.Sleep(1000);
-            }
-            #endregion
 
             #region SD Card Init
             if (PersistentStorage.DetectSDCard())
@@ -60,14 +44,12 @@ namespace Burt_MainController
                 try
                 {
                     sdCardInterface = new PersistentStorage("SD");
+                    sdCardInterface.MountFileSystem();
                 }
                 catch
                 {
                     throw new Exception("SD card not detected");
                 }
-                ms.AttachLun(0, sdCardInterface, " ", " ");
-
-                sdCardInterface.MountFileSystem();
 
                 if (File.Exists("\\SD\\Credentials.xml"))
                 {
@@ -78,7 +60,7 @@ namespace Burt_MainController
             #endregion
 
             //Setup_RLP();
-            Setup_WiFly_SPI1();
+            //Setup_WiFly_SPI1();
             Setup_CMUCam3_COM1();
             Setup_MotorController_COM2();
 
@@ -90,8 +72,8 @@ namespace Burt_MainController
             {
                 // Clean up SD card interface
                 sdCardInterface.UnmountFileSystem();
-                ms.EnableLun(0);
-                ms.DisableLun(0);
+                //ms.EnableLun(0);
+                //ms.DisableLun(0);
             }
             #endregion
 
@@ -124,7 +106,7 @@ namespace Burt_MainController
                 WiFly.Shield.Setup((Cpu.Pin)FEZ_Pin.Digital.Di10,
                                     SPI.SPI_module.SPI1,
                                     WiFly.Shield.ClockRate.Xtal_12Mhz,
-                                    WiFly.Shield.BaudRate.BaudRate_57600);
+                                    WiFly.Shield.BaudRate.BaudRate_9600);
             }
             catch (Exception e)
             {
@@ -199,7 +181,6 @@ namespace Burt_MainController
             mCMUCam3Controller_COM1.ReadTimeout = 250;
             mCMUCam3Controller_COM1.WriteTimeout = 250;
             mCMUCam3Controller_COM1.Open();
-            
         }
         #endregion
 
@@ -391,12 +372,19 @@ namespace Burt_MainController
 
                 if ((DataStream[5] & 0x02) == 0)
                 {
-                    Debug.Print(
-                        "J " + joystickX.ToString() + "," + joystickY.ToString() +
-                        " -> " +
-                        "M " + L.ToString() + "," + R.ToString());
+                    //Debug.Print(
+                    //    "J " + joystickX.ToString() + "," + joystickY.ToString() +
+                    //    " -> " +
+                    //    "M " + L.ToString() + "," + R.ToString());
 
-                    //Debug.Print("C button");
+                    if (mCMUCam3Controller_COM1.BytesToRead > 0)
+                    {
+                        byte[] buffer = new byte[2];
+                        mCMUCam3Controller_COM1.Read(buffer, 0, 1);
+
+                        string buf = System.Text.Encoding.UTF8.GetChars(buffer).ToString();
+                        Debug.Print(buf);
+                    }
                 }
 
                 //Thread.Sleep(150);

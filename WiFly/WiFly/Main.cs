@@ -407,7 +407,7 @@ namespace WiFly
             WaitForResponse("Associated!");
             Debug.Print("Associated!");
             
-            WaitForResponse("Listen on " + listeningPort.ToString());
+            //WaitForResponse("Listen on " + listeningPort.ToString());
 
             // Turn on WiFi auto-joining
             SendCommand("set wlan join 1");
